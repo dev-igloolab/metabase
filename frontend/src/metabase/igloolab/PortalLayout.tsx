@@ -4,7 +4,6 @@ import { Link } from "react-router";
 import { replace } from "react-router-redux";
 import { t } from "ttag";
 
-import { UserAvatar } from "metabase/common/components/UserAvatar";
 import { AppBarRoot } from "metabase/nav/components/AppBar/AppBarLarge.styled";
 import { AppBarLogo } from "metabase/nav/components/AppBar/AppBarLogo";
 import { useDispatch, useSelector } from "metabase/redux";
@@ -65,7 +64,6 @@ export function PortalLayout({
             <Menu.Target>
               <Button
                 variant="subtle"
-                leftSection={<UserAvatar user={user} />}
                 rightSection={<Icon name="chevrondown" size={12} aria-hidden />}
               >
                 {userName}
