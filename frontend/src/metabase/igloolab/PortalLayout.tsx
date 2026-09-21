@@ -18,6 +18,7 @@ import {
   Menu,
   Stack,
   Text,
+  useColorScheme,
 } from "metabase/ui";
 
 import { isPortalPath } from "./portal-utils";
@@ -31,6 +32,7 @@ export function PortalLayout({
 }) {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
+  const { colorScheme, setColorScheme } = useColorScheme();
   const allowed = isPortalPath(pathname);
   const userName = user?.common_name || user?.first_name || user?.email;
 
@@ -76,6 +78,38 @@ export function PortalLayout({
                   {user.email}
                 </Text>
               </Stack>
+              <Divider />
+              <Menu.Label>{t`Tema`}</Menu.Label>
+              <Menu.Item
+                rightSection={
+                  colorScheme === "auto" ? (
+                    <Icon name="check" size={14} aria-hidden />
+                  ) : null
+                }
+                onClick={() => setColorScheme("auto")}
+              >
+                {t`Automático`}
+              </Menu.Item>
+              <Menu.Item
+                rightSection={
+                  colorScheme === "light" ? (
+                    <Icon name="check" size={14} aria-hidden />
+                  ) : null
+                }
+                onClick={() => setColorScheme("light")}
+              >
+                {t`Claro`}
+              </Menu.Item>
+              <Menu.Item
+                rightSection={
+                  colorScheme === "dark" ? (
+                    <Icon name="check" size={14} aria-hidden />
+                  ) : null
+                }
+                onClick={() => setColorScheme("dark")}
+              >
+                {t`Oscuro`}
+              </Menu.Item>
               <Divider />
               <Menu.Item
                 leftSection={<Icon name="exit" size={16} aria-hidden />}
