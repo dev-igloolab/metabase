@@ -37,6 +37,7 @@ import { DocumentPageOuter } from "metabase/documents/routes";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
 import { HomePage } from "metabase/home/components/HomePage";
 import { Onboarding } from "metabase/home/components/Onboarding";
+import { PortalPage } from "metabase/igloolab/PortalPage";
 import { getMetabotRoutes } from "metabase/metabot/routes";
 import { getMetricRoutes } from "metabase/metrics/routes";
 import { MetricsViewerPage } from "metabase/metrics-viewer";
@@ -146,6 +147,7 @@ export const getRoutes = (store: AppStore) => {
 
         {/* MAIN */}
         <Route component={IsAuthenticated}>
+          <Route path="/portal" component={PortalPage} />
           {getMetabotRoutes()}
 
           {/* The global all hands routes, things in here are for all the folks */}

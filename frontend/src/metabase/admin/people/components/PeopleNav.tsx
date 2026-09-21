@@ -14,9 +14,11 @@ import { UpsellGem } from "metabase/common/components/upsells/components/UpsellG
 import { useSetting } from "metabase/common/hooks";
 import { useSelector } from "metabase/redux";
 import { getLocation } from "metabase/selectors/routing";
+import { getUserIsAdmin } from "metabase/selectors/user";
 import { Divider, Stack } from "metabase/ui";
 
 export function PeopleNav() {
+  const isAdmin = useSelector(getUserIsAdmin);
   const shouldNudge = useSelector(shouldNudgeToPro) as boolean;
   const isUsingTenants = useSetting("use-tenants");
   const showTenantsUpsell = useSelector(shouldShowTenantsUpsell);
@@ -38,6 +40,14 @@ export function PeopleNav() {
           label={isUsingTenants ? t`Internal groups` : t`Groups`}
           icon="group"
         />
+        {isAdmin && (
+          <PeopleNavItem
+            path="/admin/people/portal"
+            data-testid="nav-item"
+            label={t`Portal de usuarios`}
+            icon="dashboard"
+          />
+        )}
         {isUsingTenants && (
           <>
             <Divider my="sm" />

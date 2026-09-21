@@ -1051,6 +1051,13 @@
            task
            util}}
 
+  igloolab
+  {:team "Gadget"
+   :api  #{metabase.igloolab.portal.api}
+   :uses #{api
+           users
+           util}}
+
   indexed-entities
   {:team "UX West"
    :api  #{metabase.indexed-entities.api

@@ -40,6 +40,7 @@ import {
   SetupSsoPage,
 } from "metabase/embedding/embedding-hub";
 import { ModalRoute } from "metabase/hoc/ModalRoute";
+import { PortalUsersPage } from "metabase/igloolab/PortalUsersPage";
 import { DataModelV1 } from "metabase/metadata/pages/DataModelV1";
 import { Help } from "metabase/monitor/tools/components/Help";
 import { JobInfoApp } from "metabase/monitor/tools/components/JobInfoApp";
@@ -160,6 +161,10 @@ export const getRoutes = (
             <Route path="groups">
               <IndexRoute component={GroupsListingApp} />
               <Route path=":groupId" component={GroupDetailApp} />
+            </Route>
+
+            <Route path="portal" component={IsAdmin}>
+              <IndexRoute component={PortalUsersPage} />
             </Route>
 
             {/* Tenants */}

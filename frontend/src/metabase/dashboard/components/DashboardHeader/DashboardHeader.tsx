@@ -16,6 +16,7 @@ import {
   getIsEditing,
 } from "metabase/dashboard/selectors";
 import { isEmbeddingSdk } from "metabase/embedding-sdk/config";
+import { useUserPortal } from "metabase/igloolab/portal";
 import { fetchPulseFormInput } from "metabase/notifications/pulse/actions";
 import { useDispatch, useSelector } from "metabase/redux";
 import { getSetting } from "metabase/selectors/settings";
@@ -36,6 +37,7 @@ export const DashboardHeaderInner = ({ dashboard }: DashboardHeaderProps) => {
   const [modalOpened, { open: openModal, close: closeModal }] = useDisclosure();
 
   const dispatch = useDispatch();
+  const { isUserPortal: portal } = useUserPortal();
   const { isGuestEmbed } = useDashboardContext();
   const canManageSubscriptions = useSelector(canManageSubscriptionsSelector);
 
@@ -134,7 +136,9 @@ export const DashboardHeaderInner = ({ dashboard }: DashboardHeaderProps) => {
         dashboard={dashboard}
         collection={collection}
         isBadgeVisible={!isEditing && !isFullscreen && isAdditionalInfoVisible}
-        isLastEditInfoVisible={hasLastEditInfo && isAdditionalInfoVisible}
+        isLastEditInfoVisible={
+          !portal && hasLastEditInfo && isAdditionalInfoVisible
+        }
         editWarning={getEditWarning(dashboard)}
         editingTitle={t`You're editing this dashboard.`.concat(
           isHomepageDashboard

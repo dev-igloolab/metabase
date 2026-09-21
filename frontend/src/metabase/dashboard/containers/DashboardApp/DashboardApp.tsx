@@ -16,6 +16,7 @@ import {
 } from "metabase/dashboard/actions";
 import { Dashboard } from "metabase/dashboard/components/Dashboard/Dashboard";
 import {
+  DASHBOARD_DISPLAY_ACTIONS,
   DASHBOARD_EDITING_ACTIONS,
   DASHBOARD_VIEW_ACTIONS,
 } from "metabase/dashboard/components/DashboardHeader/DashboardHeaderButtonRow/constants";
@@ -32,6 +33,7 @@ import {
   usePageTitle,
   usePageTitleWithLoadingTime,
 } from "metabase/hooks/use-page-title";
+import { useUserPortal } from "metabase/igloolab/portal";
 import { useDispatch, useSelector } from "metabase/redux";
 import { setErrorPage } from "metabase/redux/app";
 import * as Urls from "metabase/urls";
@@ -99,6 +101,7 @@ export const DashboardApp = ({
   children,
 }: DashboardAppProps) => {
   const dispatch = useDispatch();
+  const { isUserPortal: portal } = useUserPortal();
 
   const [error, setError] = useState<string>();
 
@@ -121,8 +124,9 @@ export const DashboardApp = ({
     let options: ReturnType<typeof parseHashOptions> = parseHashOptions(
       window.location.hash,
     );
-    const editingOnLoad = options.edit;
-    const addCardOnLoad = options.add != null ? Number(options.add) : undefined;
+    const editingOnLoad = !portal && options.edit;
+    const addCardOnLoad =
+      !portal && options.add != null ? Number(options.add) : undefined;
 
     try {
       if (editingOnLoad) {
@@ -178,15 +182,22 @@ export const DashboardApp = ({
         reportAutoScrolledToDashcard={reportAutoScrolledToDashcard}
         onLoadWithoutCards={onLoadDashboard}
         onError={(error) => dispatch(setErrorPage(error))}
-        navigateToNewCardFromDashboard={(opts) =>
-          dispatch(navigateToNewCardFromDashboard(opts))
+        navigateToNewCardFromDashboard={
+          portal
+            ? null
+            : (opts) => dispatch(navigateToNewCardFromDashboard(opts))
+        }
+        dashcardMenu={
+          portal ? { withDownloads: false, withEditLink: false } : undefined
         }
         onNewQuestion={() => dispatch(addDashboardQuestion("notebook"))}
         onAddQuestion={(dashboard: IDashboard | null) => {
           dispatch(setEditingDashboard(dashboard));
           dispatch(toggleSidebar(SIDEBAR_NAME.addQuestion));
         }}
-        dashboardActions={DASHBOARD_APP_ACTIONS}
+        dashboardActions={
+          portal ? DASHBOARD_DISPLAY_ACTIONS : DASHBOARD_APP_ACTIONS
+        }
       >
         <DashboardAppInner location={location} route={route}>
           {children}
