@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: v63.igloolab-client-interface
+      author: igloolab
+      comment: Store Igloolab portal assignments independently from Metabase users
+      changes:
+        - createTable:
+            tableName: igloolab_user_portal
+            remarks: Igloolab-specific interface assignment for a Metabase user
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  remarks: Metabase user assigned to an Igloolab interface
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    referencedTableName: core_user
+                    referencedColumnNames: id
+                    foreignKeyName: fk_igloolab_user_portal_user
+                    deleteCascade: true
+              - column:
+                  name: interface_type
+                  type: varchar(20)
+                  remarks: Interface selected by an administrator
+                  defaultValue: metabase
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: igloolab_user_portal

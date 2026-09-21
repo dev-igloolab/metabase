@@ -23,6 +23,8 @@ import { ContentViewportContext } from "metabase/common/context/ContentViewportC
 import CS from "metabase/css/core/index.css";
 import ScrollToTop from "metabase/hoc/ScrollToTop";
 import { usePageTitle } from "metabase/hooks/use-page-title";
+import { PortalLayout } from "metabase/igloolab/PortalLayout";
+import { useUserPortal } from "metabase/igloolab/portal";
 import { connect, useSelector } from "metabase/redux";
 import { setErrorPage } from "metabase/redux/app";
 import type { AppErrorDescriptor, State } from "metabase/redux/store";
@@ -91,6 +93,7 @@ const mapDispatchToProps: AppDispatchProps = {
 };
 
 function App({
+  location,
   errorPage,
   isAdminApp,
   isDataStudioApp,
@@ -101,6 +104,8 @@ function App({
 }: AppProps) {
   const [viewportElement, setViewportElement] = useState<HTMLElement | null>();
   const applicationName = useSelector(getApplicationName);
+  const { isUserPortal: portal, isLoading: isInterfaceLoading } =
+    useUserPortal();
 
   usePageTitle(applicationName, { titleIndex: 0 });
   useTokenRefresh();
@@ -108,6 +113,27 @@ function App({
   useEffect(() => {
     initializeIframeResizer();
   }, []);
+
+  if (isInterfaceLoading) {
+    return null;
+  }
+
+  if (portal && !location.pathname.startsWith("/auth/")) {
+    return (
+      <ErrorBoundary onError={onError}>
+        <PortalLayout pathname={location.pathname}>
+          <ContentViewportContext.Provider value={viewportElement ?? null}>
+            <div
+              ref={setViewportElement}
+              style={{ height: "100%", overflow: "auto" }}
+            >
+              {errorPage ? getErrorComponent(errorPage) : children}
+            </div>
+          </ContentViewportContext.Provider>
+        </PortalLayout>
+      </ErrorBoundary>
+    );
+  }
 
   return (
     <ErrorBoundary onError={onError}>
