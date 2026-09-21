@@ -5,7 +5,6 @@ import { replace } from "react-router-redux";
 import { t } from "ttag";
 
 import { AppBarRoot } from "metabase/nav/components/AppBar/AppBarLarge.styled";
-import { AppBarLogo } from "metabase/nav/components/AppBar/AppBarLogo";
 import { useDispatch, useSelector } from "metabase/redux";
 import { logout } from "metabase/redux/auth";
 import { getUser } from "metabase/selectors/user";
@@ -49,11 +48,6 @@ export function PortalLayout({
     >
       <AppBarRoot hasSidebarOpen={false}>
         <Group gap="sm" flex="1 1 auto">
-          <AppBarLogo
-            isLogoVisible
-            isNavBarEnabled={false}
-            isGitSyncVisible={false}
-          />
           {pathname !== "/portal" && (
             <Button component={Link} to="/portal" variant="subtle">
               {t`Volver a tus dashboards`}
