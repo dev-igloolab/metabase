@@ -188,7 +188,7 @@ export const DashboardApp = ({
             : (opts) => dispatch(navigateToNewCardFromDashboard(opts))
         }
         dashcardMenu={
-          portal ? { withDownloads: false, withEditLink: false } : undefined
+          portal ? { withDownloads: true, withEditLink: false } : undefined
         }
         onNewQuestion={() => dispatch(addDashboardQuestion("notebook"))}
         onAddQuestion={(dashboard: IDashboard | null) => {
